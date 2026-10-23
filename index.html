@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lemon Hub — by NamDevXHub</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0; padding: 0;
+    background: #0a0600;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+}
+.font-orbitron { font-family: 'Orbitron', sans-serif; }
+.font-mono { font-family: 'Space Mono', monospace; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0a0600; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #ffe066, #ffb300); border-radius: 4px; }
+
+/* ===== BACKGROUND (OPTIMIZED) ===== */
+.bg-layer {
+    position: fixed; inset: 0; z-index: -3;
+    background:
+        radial-gradient(ellipse at 20% 10%, rgba(255, 220, 60, 0.12), transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(255, 200, 0, 0.1), transparent 50%),
+        #0a0600;
+}
+.grid-layer {
+    position: fixed; inset: 0; z-index: -2;
+    background-image:
+        linear-gradient(rgba(255, 220, 60, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 220, 60, 0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+.stars-layer { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+.star {
+    position: absolute; border-radius: 50%;
+    background: #ffe066; box-shadow: 0 0 4px #ffe066;
+    animation: twinkle 4s ease-in-out infinite;
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+/* ===== GLOW & TITLE ===== */
+.glow-lemon { text-shadow: 0 0 12px rgba(255, 230, 100, 0.8); }
+.title-lemon {
+    background: linear-gradient(135deg, #fff59d 0%, #ffe066 25%, #ffc832 55%, #ffb300 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 15px rgba(255, 220, 60, 0.4));
+    background-size: 200% auto;
+    animation: shimmer 5s linear infinite;
+}
+@keyframes shimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+/* ===== GLASS (NO BACKDROP BLUR FOR PERFORMANCE) ===== */
+.glass-panel {
+    background: rgba(24, 18, 4, 0.95);
+    border: 1px solid rgba(255, 220, 60, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    transition: all 0.3s;
+}
+.glass-panel:hover {
+    border-color: rgba(255, 220, 60, 0.6);
+    box-shadow: 0 0 25px rgba(255, 220, 60, 0.2);
+}
+
+/* ===== BUTTONS ===== */
+.btn-lemon {
+    background: rgba(255, 220, 60, 0.1);
+    border: 2px solid #ffe066; color: #fff59d;
+    transition: all 0.2s ease;
+    position: relative;
+    font-family: 'Orbitron', sans-serif; font-weight: 700; letter-spacing: 0.08em;
+}
+.btn-lemon:hover {
+    background: #ffe066;
+    color: #0a0600;
+    box-shadow: 0 0 20px rgba(255, 220, 60, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: transparent; border: 2px solid rgba(255, 220, 60, 0.5); color: #fff59d;
+    transition: all 0.2s; font-family: 'Orbitron', sans-serif; font-weight: 700;
+}
+.btn-outline:hover {
+    border-color: #ffe066; background: rgba(255, 220, 60, 0.1);
+    color: #fff; box-shadow: 0 0 20px rgba(255, 220, 60, 0.3);
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10, 6, 0, 0.9);
+    border-bottom: 1px solid rgba(255, 220, 60, 0.15);
+    transition: all 0.3s;
+}
+.navbar.scrolled {
+    background: rgba(10, 6, 0, 0.98);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+.nav-link { position: relative; transition: all 0.2s; }
+.nav-link::after {
+    content: ''; position: absolute;
+    bottom: -4px; left: 0; width: 0; height: 2px;
+    background: #ffe066;
+    transition: width 0.3s;
+}
+.nav-link:hover::after { width: 100%; }
+.nav-link:hover { color: #ffe066 !important; }
+
+/* ===== LOGO ===== */
+.logo-lemon {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fff9c4, #ffe066 40%, #ffb300 100%);
+    box-shadow: 0 0 15px rgba(255, 220, 60, 0.5), inset -2px -4px 8px rgba(200, 130, 0, 0.4);
+    display: flex; align-items: center; justify-content: center;
+    color: #3e2723; font-size: 20px; transition: all 0.3s;
+}
+.logo-lemon:hover { transform: scale(1.05); }
+
+.hero-title {
+    font-size: clamp(2.5rem, 9vw, 7rem);
+    line-height: 0.95; letter-spacing: -0.02em;
+}
+
+/* ===== CARD ===== */
+.feature-card {
+    position: relative;
+    transition: all 0.3s;
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 220, 60, 0.5) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 220, 60, 0.15);
+}
+
+/* ===== STAT ===== */
+.stat-num {
+    font-family: 'Orbitron', sans-serif; font-weight: 900;
+    background: linear-gradient(135deg, #fff59d, #ffb300);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 220, 60, 0.5), transparent);
+    position: relative;
+}
+.divider::after {
+    content: '◆'; position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffe066; font-size: 14px;
+}
+
+/* ===== ANIMATIONS (OPTIMIZED) ===== */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+.animate-float { animation: float 5s ease-in-out infinite; }
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+
+.reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+.badge-lemon {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 14px; border-radius: 999px;
+    background: rgba(255, 220, 60, 0.1);
+    border: 1px solid rgba(255, 220, 60, 0.4);
+    font-family: 'Orbitron', sans-serif; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.25em;
+    color: #fff59d; text-transform: uppercase;
+}
+
+.author-sig {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: rgba(255, 220, 60, 0.7);
+    text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="grid-layer"></div>
+<div class="stars-layer" id="starsLayer"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+        <a href="#home" class="flex items-center gap-3 group">
+            <div class="logo-lemon"><i class="fa-solid fa-lemon"></i></div>
+            <div>
+                <div class="font-orbitron font-black text-lg text-yellow-200 glow-lemon leading-none">LEMON HUB</div>
+                <div class="author-sig">by NamDevXHub</div>
+            </div>
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+            <a href="#home" class="nav-link text-sm font-bold text-yellow-100/80 transition">Trang Chủ</a>
+            <a href="#features" class="nav-link text-sm font-bold text-yellow-100/80 transition">Tính Năng</a>
+            <a href="#why" class="nav-link text-sm font-bold text-yellow-100/80 transition">Tại Sao Chọn</a>
+            <a href="#faq" class="nav-link text-sm font-bold text-yellow-100/80 transition">FAQ</a>
+            <a href="https://discord.gg/3vAR4zfz7f" target="_blank" class="btn-lemon px-5 py-2 rounded-lg text-xs">DISCORD</a>
+        </div>
+        <button id="mobileMenuBtn" class="md:hidden text-yellow-300 text-2xl">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+    <div id="mobileMenu" class="md:hidden hidden bg-black/95 border-t border-yellow-500/20">
+        <div class="flex flex-col p-4 gap-3">
+            <a href="#home" class="text-yellow-100 font-bold py-2 border-b border-white/5">Trang Chủ</a>
+            <a href="#features" class="text-yellow-100 font-bold py-2 border-b border-white/5">Tính Năng</a>
+            <a href="#why" class="text-yellow-100 font-bold py-2 border-b border-white/5">Tại Sao Chọn</a>
+            <a href="https://discord.gg/3vAR4zfz7f" target="_blank" class="btn-lemon px-5 py-3 rounded-lg text-xs text-center mt-2">DISCORD</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="relative min-h-screen flex items-center justify-center px-4 pt-24 pb-12 overflow-hidden">
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div class="w-[500px] h-[500px] rounded-full bg-yellow-300/5 blur-[80px]"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center w-full">
+        <div class="text-center lg:text-left fade-in-up">
+            <div class="badge-lemon mb-6">
+                <span class="w-2 h-2 rounded-full bg-green-400"></span>
+                LEMON HUB · BY NAMDEVXHUB · 2026
+            </div>
+            
+            <h1 class="font-orbitron hero-title font-black mb-4">
+                <span class="block title-lemon">LEMON</span>
+                <span class="block title-lemon">HUB</span>
+            </h1>
+            
+            <div class="divider w-32 mb-4 mx-auto lg:mx-0"></div>
+            
+            <p class="font-orbitron text-sm text-yellow-300 mb-6 tracking-[0.3em]">
+                <i class="fa-solid fa-code mr-2"></i> BY NAMDEVXHUB
+            </p>
+            
+            <p class="text-lg sm:text-xl text-yellow-100/70 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                Hub tự động hóa thế hệ mới — tối ưu hiệu năng, giao diện sạch, hỗ trợ 50+ tính năng tiện lợi và luôn cập nhật.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-8">
+                <a href="https://discord.gg/3vAR4zfz7f" target="_blank" class="btn-lemon px-8 py-4 rounded-xl text-sm inline-flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-discord text-lg"></i> THAM GIA DISCORD
+                </a>
+                <a href="#features" class="btn-outline px-8 py-4 rounded-xl text-sm inline-flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-th"></i> XEM TÍNH NĂNG
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 max-w-md mx-auto lg:mx-0">
+                <div class="text-center border-x border-yellow-500/20">
+                <div class="stat-num text-2xl sm:text-3xl">50+</div>
+                <div class="font-mono text-[10px] text-yellow-500/60 uppercase tracking-widest mt-1">FEATURES</div>
+                </div>
+                <div class="text-center">
+                <div class="stat-num text-2xl sm:text-3xl">24/7</div>
+                <div class="font-mono text-[10px] text-yellow-500/60 uppercase tracking-widest mt-1">SUPPORT</div>
+                </div>
+            </div>
+        </div>
+   
+        <div class="relative flex items-center justify-center fade-in-up" style="animation-delay: 0.2s;">
+            <div class="glass-panel p-2 rounded-2xl w-full max-w-[500px] border-yellow-500/40 animate-float">
+                <div class="bg-[#0d0a04] rounded-xl overflow-hidden border border-yellow-500/20">
+                    <div class="bg-black/60 px-4 py-3 flex items-center gap-2 border-b border-yellow-500/10">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <div class="ml-auto font-mono text-[10px] text-gray-500">Lemon Hub — Dashboard</div>
+                    </div>
+                    <div class="flex h-[250px]">
+                        <div class="w-[60px] bg-black/40 border-r border-yellow-500/10 p-3 flex flex-col items-center gap-4">
+                            <i class="fa-solid fa-lemon text-yellow-400 text-lg"></i>
+                            <div class="w-full h-1.5 rounded bg-yellow-500/50 mt-4"></div>
+                            <div class="w-full h-1.5 rounded bg-gray-700"></div>
+                            <div class="w-full h-1.5 rounded bg-gray-700"></div>
+                        </div>
+                        <div class="flex-1 p-5 flex flex-col gap-4">
+                            <div class="flex gap-3">
+                                <div class="flex-1 h-12 rounded-lg bg-yellow-500/5 border border-yellow-500/10"></div>
+                                <div class="flex-1 h-12 rounded-lg bg-yellow-500/5 border border-yellow-500/10"></div>
+                            </div>
+                            <div class="flex-1 rounded-lg border border-yellow-500/10 bg-gradient-to-t from-yellow-500/10 to-transparent relative overflow-hidden">
+                                <div class="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-400"></div>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <div class="w-full h-2 rounded bg-gray-700"></div>
+                                <div class="w-3/4 h-2 rounded bg-gray-700"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES (50+ TÍNH NĂNG CHUẨN BANANA CAT HUB) -->
+<section id="features" class="py-20 px-4 relative">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-10 reveal">
+            <div class="badge-lemon mb-4">TÍNH NĂNG · BY NAMDEVXHUB</div>
+            <h2 class="font-orbitron text-3xl sm:text-5xl font-black mb-3 title-lemon">50+ TÍNH NĂNG MẠNH MẼ</h2>
+            <p class="text-yellow-100/60 max-w-2xl mx-auto">Từ tự động hóa cơ bản đến hệ thống nâng cao — tất cả đều có trong Hub.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 1 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-wheat-awn text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Farm</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động farming hiệu quả, tối ưu hóa từng vòng lặp để đạt loot tối đa.</p>
+            </div>
+            <!-- 2 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-scroll text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Quest</h3>
+                <p class="text-yellow-100/60 text-sm">Nhận và hoàn thành quest tự động, không bỏ sót bất kỳ nhiệm vụ nào.</p>
+            </div>
+            <!-- 3 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-skull-crossbones text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Boss</h3>
+                <p class="text-yellow-100/60 text-sm">Tham chiến boss tự động với chiến thuật thông minh và phản xạ nhanh.</p>
+            </div>
+            <!-- 4 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-chess-rook text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Raid</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động tham gia raid, tối ưu điểm số và phần thưởng mỗi mùa.</p>
+            </div>
+            <!-- 5 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-water text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Sea Event</h3>
+                <p class="text-yellow-100/60 text-sm">Không bỏ lỡ bất kỳ sự kiện biển nào với hệ thống phát hiện thông minh.</p>
+            </div>
+            <!-- 6 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-magnet text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Collect</h3>
+                <p class="text-yellow-100/60 text-sm">Thu thập item, tài nguyên và phần thưởng tự động, không cần giám sát.</p>
+            </div>
+            <!-- 7 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-map-location-dot text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Teleport System</h3>
+                <p class="text-yellow-100/60 text-sm">Dịch chuyển tức thì đến bất kỳ vị trí nào với hệ thống teleport tiên tiến.</p>
+            </div>
+            <!-- 8 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-chart-pie text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Status UI</h3>
+                <p class="text-yellow-100/60 text-sm">Giao diện hiển thị trạng thái real-time, theo dõi mọi thông số quan trọng.</p>
+            </div>
+            <!-- 9 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-bell text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Webhook Notification</h3>
+                <p class="text-yellow-100/60 text-sm">Nhận thông báo tức thì qua Discord Webhook khi có sự kiện quan trọng.</p>
+            </div>
+            <!-- 10 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-users text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Multi Account</h3>
+                <p class="text-yellow-100/60 text-sm">Hỗ trợ đa tài khoản đồng thời, quản lý tập trung trong một giao diện.</p>
+            </div>
+            <!-- 11 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-sliders text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Config System</h3>
+                <p class="text-yellow-100/60 text-sm">Hệ thống cấu hình linh hoạt, lưu/tải profile dễ dàng chỉ với vài click.</p>
+            </div>
+            <!-- 12 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-gauge-high text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Performance Optimization</h3>
+                <p class="text-yellow-100/60 text-sm">Tối ưu CPU & RAM thông minh, chạy mượt ngay cả trên máy cấu hình thấp.</p>
+            </div>
+            <!-- 13 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-crosshairs text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Aim</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động ngắm mục tiêu chính xác, tăng tỷ lệ trúng đòn trong mọi trận chiến.</p>
+            </div>
+            <!-- 14 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-person-running text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Dodge</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động né tránh kỹ năng của kẻ địch, sinh tồn tốt hơn trong phó bản khó.</p>
+            </div>
+            <!-- 15 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-sack-dollar text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Loot</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động nhặt trang bị, vật phẩm rơi và sắp xếp vào túi đồ khoa học.</p>
+            </div>
+            <!-- 16 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-comment-dots text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Chat</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động gửi tin nhắn chúc mừng hoặc spam kênh thế giới theo kịch bản.</p>
+            </div>
+            <!-- 17 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-box-open text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Trade</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động giao dịch, chuyển vật phẩm giữa các tài khoản trong cùng hệ thống.</p>
+            </div>
+            <!-- 18 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-trophy text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Trophy</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động leo rank, cày danh hiệu và tham gia các giải đấu nhỏ.</p>
+            </div>
+            <!-- 19 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-bolt text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Combo</h3>
+                <p class="text-yellow-100/60 text-sm">Thực hiện chuỗi kỹ năng liên hoàn mượt mà, tối đa hóa sát thương đầu ra.</p>
+            </div>
+            <!-- 20 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-flask text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Buff</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động sử dụng bình thuốc, buff khi hết thời gian hiệu lực.</p>
+            </div>
+            <!-- 21 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-shield-halved text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Shield</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động bật khiên bảo vệ khi lượng máu giảm xuống dưới ngưỡng nguy hiểm.</p>
+            </div>
+            <!-- 22 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-gem text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Enchant</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động cường hóa trang bị, tiêu hao tài nguyên để tăng chỉ số.</p>
+            </div>
+            <!-- 23 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-hammer text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Forge</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động rèn đúc vật phẩm từ nguyên liệu thô, tối ưu phôi.</p>
+            </div>
+            <!-- 24 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-seedling text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Plant</h3>
+                <p class="text-yellow-100/60 text-sm">Trồng cây, tưới nước và thu hoạch tài nguyên trong trang trại.</p>
+            </div>
+            <!-- 25 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-fish text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Fish</h3>
+                <p class="text-yellow-100/60 text-sm">Câu cá tự động, bắt cá hiếm và quản lý kho cá hiệu quả.</p>
+            </div>
+            <!-- 26 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-pickaxe text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Mine</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động đào mỏ, tìm kiếm quặng quý và khoáng sản.</p>
+            </div>
+            <!-- 27 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-utensils text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Cook</h3>
+                <p class="text-yellow-100/60 text-sm">Nấu ăn tự động, tạo ra các món ăn tăng buff từ nguyên liệu.</p>
+            </div>
+            <!-- 28 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-cart-shopping text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Buy</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động mua vật phẩm, trang bị cần thiết từ cửa hàng NPC.</p>
+            </div>
+            <!-- 29 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-money-bill-trend-up text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Sell</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động bán các vật phẩm rác để lấy vàng, giải phóng túi đồ.</p>
+            </div>
+            <!-- 30 -->
+            <div class="glass-panel feature-card p-6 reveal rounded-2xl">
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-arrow-up-right-dots text-yellow-300 text-lg"></i>
+                </div>
+                <h3 class="font-orbitron text-base font-black text-yellow-200 mb-2">Auto Upgrade</h3>
+                <p class="text-yellow-100/60 text-sm">Tự động nâng cấp kỹ năng, thiên phú theo bảng xếp hạng ưu tiên.</p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-8">
+            <div class="badge-lemon text-sm py-2 px-6">VÀ 20+ TÍNH NĂNG KHÁC ĐANG CHỜ BẠN!</div>
+        </div>
+    </div>
+</section>
+
+<!-- WHY CHOOSE (LẤY TỪ BANANA CAT HUB) -->
+<section id="why" class="py-20 px-4 relative bg-black/20">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-10 reveal">
+            <div class="badge-lemon mb-4">TẠI SAO CHỌN</div>
+            <h2 class="font-orbitron text-3xl sm:text-5xl font-black mb-3 title-lemon">TẠI SAO CHỌN LEMON HUB?</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 1 -->
+            <div class="glass-panel p-6 reveal rounded-2xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>
+                <h3 class="font-orbitron text-lg font-black text-yellow-200 mb-2">Fast & Stable</h3>
+                <p class="text-yellow-100/60 text-sm">Hệ thống được tối ưu kỹ lưỡng, hoạt động ổn định 24/7 không gián đoạn.</p>
+            </div>
+            <!-- 2 -->
+            <div class="glass-panel p-6 reveal rounded-2xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>
+                <h3 class="font-orbitron text-lg font-black text-yellow-200 mb-2">Clean UI</h3>
+                <p class="text-yellow-100/60 text-sm">Giao diện tối giản, không rối, mọi chức năng đều dễ tìm và dễ dùng.</p>
+            </div>
+            <!-- 3 -->
+            <div class="glass-panel p-6 reveal rounded-2xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>
+                <h3 class="font-orbitron text-lg font-black text-yellow-200 mb-2">Smart Automation</h3>
+                <p class="text-yellow-100/60 text-sm">Thuật toán thông minh, tự thích nghi với từng tình huống trong game.</p>
+            </div>
+            <!-- 4 -->
+            <div class="glass-panel p-6 reveal rounded-2xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>
+                <h3 class="font-orbitron text-lg font-black text-yellow-200 mb-2">Low Lag</h3>
+                <p class="text-yellow-100/60 text-sm">Tiêu tốn tài nguyên tối thiểu, không làm chậm máy hay kết nối mạng.</p>
+            </div>
+            <!-- 5 -->
+            <div class="glass-panel p-6 reveal rounded-2xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>
+                <h3 class="font-orbitron text-lg font-black text-yellow-200 mb-2">Easy Setup</h3>
+                <p class="text-yellow-100/60 text-sm">Cài đặt trong 60 giây, hướng dẫn chi tiết bằng tiếng Việt đầy đủ.</p>
+            </div>
+            <!-- 6 -->
+            <div class="glass-panel p-6 reveal rounded-2xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>
+                <h3 class="font-orbitron text-lg font-black text-yellow-200 mb-2">Active Support</h3>
+                <p class="text-yellow-100/60 text-sm">Đội ngũ hỗ trợ sẵn sàng 24/7 qua Discord, phản hồi trong vài phút.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ / CÂU HỎI THƯỜNG GẶP -->
+<section id="faq" class="py-20 px-4 relative">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-10 reveal">
+            <div class="badge-lemon mb-4">HỖ TRỢ · FAQ</div>
+            <h2 class="font-orbitron text-3xl sm:text-5xl font-black mb-3 title-lemon">CÂU HỎI THƯỜNG GẶP</h2>
+            <p class="text-yellow-100/60 max-w-2xl mx-auto">Giải đáp các thắc mắc phổ biến nhất khi sử dụng Lemon Hub.</p>
+        </div>
+
+        <div class="flex flex-col gap-4">
+            <!-- FAQ 1 -->
+            <div class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item">
+                <button class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer bg-transparent border-none text-yellow-200 font-orbitron font-black text-base sm:text-lg">
+                    <span class="flex items-center gap-3">
+                        <i class="fa-solid fa-circle-question text-yellow-400"></i>
+                        Hub có dễ sử dụng không?
+                    </span>
+                    <i class="faq-icon fa-solid fa-chevron-down text-yellow-400"></i>
+                </button>
+                <div class="faq-answer text-yellow-100/70 text-sm leading-relaxed">
+                    Rất dễ! Chỉ cần tải Hub, chạy file cài đặt và làm theo hướng dẫn từng bước. Toàn bộ giao diện được thiết kế tối giản, dễ hiểu kể cả với người mới lần đầu sử dụng.
+                </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item">
+                <button class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer bg-transparent border-none text-yellow-200 font-orbitron font-black text-base sm:text-lg">
+                    <span class="flex items-center gap-3">
+                        <i class="fa-solid fa-arrows-rotate text-yellow-400"></i>
+                        Có cập nhật thường xuyên không?
+                    </span>
+                    <i class="faq-icon fa-solid fa-chevron-down text-yellow-400"></i>
+                </button>
+                <div class="faq-answer text-yellow-100/70 text-sm leading-relaxed">
+                    Có! Chúng tôi phát hành bản cập nhật liên tục — bao gồm tính năng mới, vá lỗi và tối ưu hiệu năng. Mỗi bản cập nhật đều được thông báo trước trên Discord.
+                </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item">
+                <button class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer bg-transparent border-none text-yellow-200 font-orbitron font-black text-base sm:text-lg">
+                    <span class="flex items-center gap-3">
+                        <i class="fa-solid fa-sliders text-yellow-400"></i>
+                        Có hỗ trợ config không?
+                    </span>
+                    <i class="faq-icon fa-solid fa-chevron-down text-yellow-400"></i>
+                </button>
+                <div class="faq-answer text-yellow-100/70 text-sm leading-relaxed">
+                    Có đầy đủ! Hệ thống Config cho phép bạn lưu, tải và chia sẻ cấu hình một cách dễ dàng. Bạn có thể tạo nhiều profile khác nhau cho từng mục đích sử dụng.
+                </div>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item">
+                <button class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer bg-transparent border-none text-yellow-200 font-orbitron font-black text-base sm:text-lg">
+                    <span class="flex items-center gap-3">
+                        <i class="fa-solid fa-headset text-yellow-400"></i>
+                        Có Discord hỗ trợ không?
+                    </span>
+                    <i class="faq-icon fa-solid fa-chevron-down text-yellow-400"></i>
+                </button>
+                <div class="faq-answer text-yellow-100/70 text-sm leading-relaxed">
+                    Có! Discord của chúng tôi luôn hoạt động 24/7 với đội ngũ support nhiệt tình. Cộng đồng sẵn sàng giúp đỡ bạn bất kỳ lúc nào.
+                </div>
+            </div>
+
+            <!-- FAQ 5 -->
+            <div class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item">
+                <button class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer bg-transparent border-none text-yellow-200 font-orbitron font-black text-base sm:text-lg">
+                    <span class="flex items-center gap-3">
+                        <i class="fa-solid fa-users text-yellow-400"></i>
+                        Hub có hỗ trợ đa tài khoản không?
+                    </span>
+                    <i class="faq-icon fa-solid fa-chevron-down text-yellow-400"></i>
+                </button>
+                <div class="faq-answer text-yellow-100/70 text-sm leading-relaxed">
+                    Có! Tính năng Multi Account cho phép quản lý nhiều tài khoản cùng lúc trong một giao diện thống nhất, tiết kiệm thời gian và tăng hiệu quả đáng kể.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA / DISCORD INVITE -->
+<section id="contact" class="py-20 px-4 relative">
+    <div class="max-w-4xl mx-auto">
+        <div class="reveal active" style="
+            background: #0d0a04;
+            border: 1px solid rgba(255, 234, 0, 0.4);
+            border-radius: 20px;
+            padding: 70px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        ">
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, #ffe066, transparent); opacity: 0.5;"></div>
+
+            <div style="font-size: 2.5rem; color: #ffe066; margin-bottom: 24px; opacity: 0.9; display: flex; justify-content: center;">
+                <i class="fa-solid fa-lemon"></i>
+            </div>
+            
+            <h2 style="font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; margin-bottom: 16px; color: #ffe066; line-height: 1.2;">
+                Bạn đã sẵn sàng<br>tham gia Discord chưa?
+            </h2>
+            
+            <p style="color: #ffe066; font-size: 1.1rem; margin-bottom: 32px; font-family: 'Rajdhani', sans-serif;">
+                Cùng đồng hành với Lemon Hub mỗi ngày. Đừng bỏ lỡ!
+            </p>
+            
+            <a href="https://discord.gg/3vAR4zfz7f" target="_blank" style="
+                display: inline-flex; 
+                align-items: center; 
+                justify-content: center; 
+                gap: 10px; 
+                padding: 14px 32px; 
+                background: transparent; 
+                border: 2px solid #ffe066; 
+                border-radius: 12px; 
+                color: #ffe066; 
+                font-family: 'Orbitron', sans-serif; 
+                font-weight: 700; 
+                font-size: 1rem;
+                transition: all 0.3s ease;
+            " onmouseover="this.style.background='#ffe066'; this.style.color='#000'; this.style.boxShadow='0 0 25px rgba(255,234,0,0.5)'; this.style.transform='translateY(-2px)';" 
+               onmouseout="this.style.background='transparent'; this.style.color='#ffe066'; this.style.boxShadow='none'; this.style.transform='translateY(0)';">
+                <i class="fa-brands fa-discord text-xl"></i> 
+                <span>Tham gia ngay</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="border-t border-yellow-500/20 py-10 px-4">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-yellow-100/40 font-mono">
+            <div>© 2026 LEMON HUB · BY <span class="text-yellow-300 font-bold">NAMDEVXHUB</span> · ALL RIGHTS RESERVED.</div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                SERVERS ONLINE 24/7
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+/* ===== STARS (GIẢM SỐ LƯỢNG CHỐNG LAG) ===== */
+const starsLayer = document.getElementById('starsLayer');
+for (let i = 0; i < 40; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 2 + 1;
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 4 + 's';
+    starsLayer.appendChild(star);
+}
+
+/* ===== NAVBAR SCROLL ===== */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 50));
+
+/* ===== MOBILE MENU ===== */
+document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+});
+document.querySelectorAll('#mobileMenu a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('mobileMenu').classList.add('hidden'));
+});
+
+/* ===== SCROLL REVEAL ===== */
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>
