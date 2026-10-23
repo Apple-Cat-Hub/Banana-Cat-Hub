@@ -639,7 +639,7 @@ body {
     </div>
 </section>
 
-<!-- FAQ / CÂU HỎI THƯỜNG GẶP -->
+<!-- FAQ / CÂU HỎI THƯỜNG GẶP (CSS ONLY - NO JS) -->
 <section id="faq" class="py-20 px-4 relative">
     <div class="max-w-4xl mx-auto">
         <div class="text-center mb-10 reveal">
@@ -650,74 +650,94 @@ body {
 
         <div class="flex flex-col gap-4">
             <!-- FAQ 1 -->
-            <div class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item">
-                <button class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer bg-transparent border-none text-yellow-200 font-orbitron font-black text-base sm:text-lg">
+            <details class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item group">
+                <summary class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer text-yellow-200 font-orbitron font-black text-base sm:text-lg select-none">
                     <span class="flex items-center gap-3">
                         <i class="fa-solid fa-circle-question text-yellow-400"></i>
                         Hub có dễ sử dụng không?
                     </span>
                     <i class="faq-icon fa-solid fa-chevron-down text-yellow-400"></i>
-                </button>
-                <div class="faq-answer text-yellow-100/70 text-sm leading-relaxed">
-                    Rất dễ! Chỉ cần tải Hub, chạy file cài đặt và làm theo hướng dẫn từng bước. Toàn bộ giao diện được thiết kế tối giản, dễ hiểu kể cả với người mới lần đầu sử dụng.
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <div class="px-6 pb-6 pt-0 text-yellow-100/70 text-sm leading-relaxed">
+                            Rất dễ! Chỉ cần tải Hub, chạy file cài đặt và làm theo hướng dẫn từng bước. Toàn bộ giao diện được thiết kế tối giản, dễ hiểu kể cả với người mới lần đầu sử dụng.
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </details>
 
             <!-- FAQ 2 -->
-            <div class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item">
-                <button class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer bg-transparent border-none text-yellow-200 font-orbitron font-black text-base sm:text-lg">
+            <details class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item group">
+                <summary class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer text-yellow-200 font-orbitron font-black text-base sm:text-lg select-none">
                     <span class="flex items-center gap-3">
                         <i class="fa-solid fa-arrows-rotate text-yellow-400"></i>
                         Có cập nhật thường xuyên không?
                     </span>
                     <i class="faq-icon fa-solid fa-chevron-down text-yellow-400"></i>
-                </button>
-                <div class="faq-answer text-yellow-100/70 text-sm leading-relaxed">
-                    Có! Chúng tôi phát hành bản cập nhật liên tục — bao gồm tính năng mới, vá lỗi và tối ưu hiệu năng. Mỗi bản cập nhật đều được thông báo trước trên Discord.
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <div class="px-6 pb-6 pt-0 text-yellow-100/70 text-sm leading-relaxed">
+                            Có! Chúng tôi phát hành bản cập nhật liên tục — bao gồm tính năng mới, vá lỗi và tối ưu hiệu năng. Mỗi bản cập nhật đều được thông báo trước trên Discord.
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </details>
 
             <!-- FAQ 3 -->
-            <div class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item">
-                <button class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer bg-transparent border-none text-yellow-200 font-orbitron font-black text-base sm:text-lg">
+            <details class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item group">
+                <summary class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer text-yellow-200 font-orbitron font-black text-base sm:text-lg select-none">
                     <span class="flex items-center gap-3">
                         <i class="fa-solid fa-sliders text-yellow-400"></i>
                         Có hỗ trợ config không?
                     </span>
                     <i class="faq-icon fa-solid fa-chevron-down text-yellow-400"></i>
-                </button>
-                <div class="faq-answer text-yellow-100/70 text-sm leading-relaxed">
-                    Có đầy đủ! Hệ thống Config cho phép bạn lưu, tải và chia sẻ cấu hình một cách dễ dàng. Bạn có thể tạo nhiều profile khác nhau cho từng mục đích sử dụng.
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <div class="px-6 pb-6 pt-0 text-yellow-100/70 text-sm leading-relaxed">
+                            Có đầy đủ! Hệ thống Config cho phép bạn lưu, tải và chia sẻ cấu hình một cách dễ dàng. Bạn có thể tạo nhiều profile khác nhau cho từng mục đích sử dụng.
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </details>
 
             <!-- FAQ 4 -->
-            <div class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item">
-                <button class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer bg-transparent border-none text-yellow-200 font-orbitron font-black text-base sm:text-lg">
+            <details class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item group">
+                <summary class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer text-yellow-200 font-orbitron font-black text-base sm:text-lg select-none">
                     <span class="flex items-center gap-3">
                         <i class="fa-solid fa-headset text-yellow-400"></i>
                         Có Discord hỗ trợ không?
                     </span>
                     <i class="faq-icon fa-solid fa-chevron-down text-yellow-400"></i>
-                </button>
-                <div class="faq-answer text-yellow-100/70 text-sm leading-relaxed">
-                    Có! Discord của chúng tôi luôn hoạt động 24/7 với đội ngũ support nhiệt tình. Cộng đồng sẵn sàng giúp đỡ bạn bất kỳ lúc nào.
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <div class="px-6 pb-6 pt-0 text-yellow-100/70 text-sm leading-relaxed">
+                            Có! Discord của chúng tôi luôn hoạt động 24/7 với đội ngũ support nhiệt tình. Cộng đồng sẵn sàng giúp đỡ bạn bất kỳ lúc nào.
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </details>
 
             <!-- FAQ 5 -->
-            <div class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item">
-                <button class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer bg-transparent border-none text-yellow-200 font-orbitron font-black text-base sm:text-lg">
+            <details class="glass-panel rounded-2xl reveal border-yellow-500/30 overflow-hidden faq-item group">
+                <summary class="faq-question w-full p-6 text-left flex items-center justify-between cursor-pointer text-yellow-200 font-orbitron font-black text-base sm:text-lg select-none">
                     <span class="flex items-center gap-3">
                         <i class="fa-solid fa-users text-yellow-400"></i>
                         Hub có hỗ trợ đa tài khoản không?
                     </span>
                     <i class="faq-icon fa-solid fa-chevron-down text-yellow-400"></i>
-                </button>
-                <div class="faq-answer text-yellow-100/70 text-sm leading-relaxed">
-                    Có! Tính năng Multi Account cho phép quản lý nhiều tài khoản cùng lúc trong một giao diện thống nhất, tiết kiệm thời gian và tăng hiệu quả đáng kể.
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <div class="px-6 pb-6 pt-0 text-yellow-100/70 text-sm leading-relaxed">
+                            Có! Tính năng Multi Account cho phép quản lý nhiều tài khoản cùng lúc trong một giao diện thống nhất, tiết kiệm thời gian và tăng hiệu quả đáng kể.
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </details>
         </div>
     </div>
 </section>
